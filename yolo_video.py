@@ -11,7 +11,7 @@ def detect_img(yolo):
     while True:
         for root, directory, files in os.walk('test/input/'):
             for img in files:
-                image = Image.open(img)
+                image = Image.open(os.join.path(root,img))
                 r_image = yolo.detect_image(img)
                 filename = "test/output_yolo/"+ os.path.splitext(img)[0]+".jpg"
                 cv2.imwrite(filename, np.array(r_image))
