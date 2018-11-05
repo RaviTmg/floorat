@@ -1,0 +1,4 @@
+chair
+diningtable
+sofa
+tvmonitor
