@@ -6,6 +6,7 @@ Class definition of YOLO_v3 style detection model on image and video
 import colorsys
 import os
 from timeit import default_timer as timer
+import csv 
 
 import cv2
 import math
@@ -101,7 +102,7 @@ class YOLO(object):
                 score_threshold=self.score, iou_threshold=self.iou)
         return boxes, scores, classes
 
-    def detect_image(self, image):
+    def detect_image(self, image, filename):
         start = timer()
 
         if self.model_image_size != (None, None):
@@ -158,15 +159,14 @@ class YOLO(object):
                 draw.rectangle(
                     [left + i, top + i, right - i, bottom - i],
                     outline=self.colors[c])
-            draw.rectangle(
-                [tuple(text_origin), tuple(text_origin + label_size)],
-                fill=self.colors[c])
-            draw.text(text_origin, label, fill=(0, 0, 0), font=font)
+            
             del draw
-
+            with open('bed_data.csv', mode='a', newline='') as bedrom_data:
+                csv_writer = csv.writer(bedrom_data, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                csv_writer.writerow([filename, label, left, top, right, bottom])
         end = timer()
         print(end - start)
-        return image
+        return image, label, left, top, right, bottom
 
     def close_session(self):
         self.sess.close()

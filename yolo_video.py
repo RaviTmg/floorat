@@ -6,15 +6,16 @@ import os
 import numpy as np
 from yolo import YOLO, detect_video
 from PIL import Image
+import csv
 
 def detect_img(yolo):
-    while True:
-        for root, directory, files in os.walk('test/input/'):
-            for img in files:
-                image = Image.open(os.path.join(root,img))
-                r_image = yolo.detect_image(image)
-                filename = "test/output_yolo/"+ os.path.splitext(img)[0]+".jpg"
-                cv2.imwrite(filename, np.array(r_image))
+    
+    for root, directory, files in os.walk('bed_dataset/'):
+        for img in files:
+            image = Image.open(os.path.join(root,img))
+            filename = "output_yolo/"+ os.path.splitext(img)[0]+".jpg"
+            r_image, label, x1,y1, x2, y2 = yolo.detect_image(image, filename)
+            cv2.imwrite(filename, np.array(r_image))
     yolo.close_session()
 
 FLAGS = None
