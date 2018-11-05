@@ -11,17 +11,10 @@ def detect_img(yolo):
     while True:
         for root, directory, files in os.walk('test/input/'):
             for img in files:
-                image = np.array(Image.open(os.path.join(root,img)))
-                height = 640
-                (h,w) = image.shape[:2]
-                r = height / float(h)
-                width = int(w*r)
-                dim = (width, height)
-                # resize image
-                resized = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
-                r_image = yolo.detect_image(resized)
+                image = Image.open(img)
+                r_image = yolo.detect_image(img)
                 filename = "test/output_yolo/"+ os.path.splitext(img)[0]+".jpg"
-                cv2.imwrite(filename, r_image)
+                cv2.imwrite(filename, np.array(r_image))
     yolo.close_session()
 
 FLAGS = None
